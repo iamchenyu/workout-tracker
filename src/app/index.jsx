@@ -1,19 +1,57 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, FlatList } from "react-native";
-import exercises from "../../assets/data/exercises.json";
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  ActivityIndicator,
+} from "react-native";
 import ExerciseListItem from "../components/ExerciseListItem";
+import { useQueryClient, useQuery } from "@tanstack/react-query";
+import { gql } from "graphql-request";
+import client from "../graphqlClient";
 
-export default function App() {
+const exercisesQuery = gql`
+  query exercises($muscle: String, $name: String, $offset: Int) {
+    exercises(muscle: $muscle, name: $name, offset: $offset) {
+      name
+      muscle
+      equipment
+    }
+  }
+`;
+
+export default function ExercisesScreen() {
+  // Access the client
+  const queryClient = useQueryClient();
+  // Queries
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["exercises"],
+    queryFn: async () => client.request(exercisesQuery),
+  });
+
+  if (error) {
+    console.log("Error when fetching data:", error);
+  } else {
+    console.log("Success when fetching data:", data);
+  }
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Workout Tracker</Text>
-      <FlatList
-        data={exercises}
-        keyExtractor={(item, index) => item + index}
-        renderItem={({ item }) => <ExerciseListItem item={item} />}
-        contentContainerStyle={{ gap: 10 }}
-      />
-      <StatusBar style="auto" />
+      {isLoading ? (
+        <ActivityIndicator />
+      ) : (
+        <>
+          <Text style={styles.title}>Workout Tracker</Text>
+          <FlatList
+            data={data?.exercises}
+            keyExtractor={(item, index) => item + index}
+            renderItem={({ item }) => <ExerciseListItem item={item} />}
+            contentContainerStyle={{ gap: 10 }}
+          />
+          <StatusBar style="auto" />
+        </>
+      )}
     </View>
   );
 }

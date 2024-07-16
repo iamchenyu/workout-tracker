@@ -1,0 +1,2 @@
+stepzen import curl https://api.api-ninjas.com/v1/exercises \
+    -H "X-Api-Key":JBw0OTy/YFoU1Cp2klCfDQ==VNRgK4CdB0Kj7Eqq

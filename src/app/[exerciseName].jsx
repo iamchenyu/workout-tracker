@@ -13,22 +13,30 @@ export default function ExerciseDetailsScreen() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Stack.Screen options={{ title: "Exercise Details" }} />
-      <View style={styles.panel}>
-        <Text style={styles.exerciseName}>
-          {exercise ? exercise.name : "Exercise Not Found"}
-        </Text>
-        <Text style={styles.exerciseSubtitle}>
-          {exercise.muscle.toUpperCase()} | {exercise.equipment.toUpperCase()}
-        </Text>
-      </View>
-      <View style={styles.panel}>
-        <Text style={styles.exerciseIst} numberOfLines={isSeeMore ? 0 : 3}>
-          {exercise.instructions}
-        </Text>
-        <Text onPress={() => setIsSeeMore(!isSeeMore)} style={styles.seeMore}>
-          {isSeeMore ? "See Less" : "See More"}
-        </Text>
-      </View>
+      {exercise ? (
+        <>
+          <View style={styles.panel}>
+            <Text style={styles.exerciseName}>{exercise.name}</Text>
+            <Text style={styles.exerciseSubtitle}>
+              {exercise.muscle.toUpperCase()} |{" "}
+              {exercise.equipment.toUpperCase()}
+            </Text>
+          </View>
+          <View style={styles.panel}>
+            <Text style={styles.exerciseIst} numberOfLines={isSeeMore ? 0 : 3}>
+              {exercise.instructions}
+            </Text>
+            <Text
+              onPress={() => setIsSeeMore(!isSeeMore)}
+              style={styles.seeMore}
+            >
+              {isSeeMore ? "See Less" : "See More"}
+            </Text>
+          </View>
+        </>
+      ) : (
+        <Text>Exercise Not Found</Text>
+      )}
     </ScrollView>
   );
 }

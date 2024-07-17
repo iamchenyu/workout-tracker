@@ -1,2 +1,35 @@
 stepzen import curl https://api.api-ninjas.com/v1/exercises \
     -H "X-Api-Key":JBw0OTy/YFoU1Cp2klCfDQ==VNRgK4CdB0Kj7Eqq
+
+mongodb+srv://jadeyw7:FPAr9f9ZAzQtrQKF@cluster0.puzzskd.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+
+https://us-east-1.aws.data.mongodb-api.com/app/data-dzdisud/endpoint/data/v1
+
+Stepzen
+DtR3KA89HDMI0FWGSiHPaTgftDySc6ET7RTsIXnfnWV4z7Ua54s1PD71a5X1Lp1U
+
+curl --request POST 'https://us-east-1.aws.data.mongodb-api.com/app/data-dzdisud/endpoint/data/v1/action/find' \
+--header 'Content-Type: application/json' \
+--header 'Access-Control-Request-Headers: *' \
+--header 'api-key: DtR3KA89HDMI0FWGSiHPaTgftDySc6ET7RTsIXnfnWV4z7Ua54s1PD71a5X1Lp1U' \
+--data-raw '{
+    "collection":"sets",
+    "database":"workouts",
+    "dataSource":"Cluster0"
+}'
+
+curl "https://us-east-1.aws.data.mongodb-api.com/app/data-dzdisud/endpoint/data/v1/action/insertOne" \
+  -X POST \
+  -H "apiKey: DtR3KA89HDMI0FWGSiHPaTgftDySc6ET7RTsIXnfnWV4z7Ua54s1PD71a5X1Lp1U" \
+  -H 'Content-Type: application/json' \
+  -H "Accept: application/json" \
+  -d '{
+    "dataSource": "Cluster0",
+    "database": "workouts",
+    "collection": "sets",
+    "document": {
+      "name": "Atlas Stones",
+      "reps": "3",
+      "weight": "102.3"
+    }
+  }'

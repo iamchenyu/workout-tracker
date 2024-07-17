@@ -1,0 +1,32 @@
+type InsertSetResponse {
+  insertedId: String
+}
+
+scalar InputDocument
+
+input NewSet {
+  username: String!
+  exercise: String!
+  reps: Int!
+  weight: Float
+}
+
+type Mutation {
+  myQuery(
+    collection: String
+    dataSource: String
+    database: String
+    document: NewSet
+  ): InsertSetResponse
+    @rest(
+      method: POST
+      endpoint: "https://us-east-1.aws.data.mongodb-api.com/app/data-dzdisud/endpoint/data/v1/action/insertOne"
+      headers: [
+        { name: "accept", value: "application/json" }
+        {
+          name: "apikey"
+          value: "DtR3KA89HDMI0FWGSiHPaTgftDySc6ET7RTsIXnfnWV4z7Ua54s1PD71a5X1Lp1U"
+        }
+      ]
+    )
+}

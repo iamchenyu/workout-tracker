@@ -11,6 +11,8 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { gql } from "graphql-request";
 import client from "../graphqlClient";
+import NewSetInput from "../components/NewSetInput";
+import SetsList from "../components/SetsList";
 
 const exerciseQuery = gql`
   query exercises($name: String) {
@@ -42,36 +44,44 @@ export default function ExerciseDetailsScreen() {
 
   if (error) {
     console.log(error);
+    return <Text>Error in fetching data</Text>;
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Stack.Screen options={{ title: "Exercise Details" }} />
-      {exercise ? (
-        <>
-          <View style={styles.panel}>
-            <Text style={styles.exerciseName}>{exercise.name}</Text>
-            <Text style={styles.exerciseSubtitle}>
-              {exercise.muscle.toUpperCase()} |{" "}
-              {exercise.equipment.toUpperCase()}
-            </Text>
-          </View>
-          <View style={styles.panel}>
-            <Text style={styles.exerciseIst} numberOfLines={isSeeMore ? 0 : 3}>
-              {exercise.instructions}
-            </Text>
-            <Text
-              onPress={() => setIsSeeMore(!isSeeMore)}
-              style={styles.seeMore}
-            >
-              {isSeeMore ? "See Less" : "See More"}
-            </Text>
-          </View>
-        </>
-      ) : (
-        <Text>Exercise Not Found</Text>
-      )}
-    </ScrollView>
+    <>
+      <ScrollView contentContainerStyle={styles.container}>
+        <Stack.Screen options={{ title: "Exercise Details" }} />
+        {exercise ? (
+          <>
+            <View style={styles.panel}>
+              <Text style={styles.exerciseName}>{exercise.name}</Text>
+              <Text style={styles.exerciseSubtitle}>
+                {exercise.muscle.toUpperCase()} |{" "}
+                {exercise.equipment.toUpperCase()}
+              </Text>
+            </View>
+            <View style={styles.panel}>
+              <Text
+                style={styles.exerciseIst}
+                numberOfLines={isSeeMore ? 0 : 3}
+              >
+                {exercise.instructions}
+              </Text>
+              <Text
+                onPress={() => setIsSeeMore(!isSeeMore)}
+                style={styles.seeMore}
+              >
+                {isSeeMore ? "See Less" : "See More"}
+              </Text>
+            </View>
+          </>
+        ) : (
+          <Text>Exercise Not Found</Text>
+        )}
+        <NewSetInput />
+        <SetsList />
+      </ScrollView>
+    </>
   );
 }
 

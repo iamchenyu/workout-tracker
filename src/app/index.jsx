@@ -7,7 +7,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import ExerciseListItem from "../components/ExerciseListItem";
-import { useQueryClient, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { gql } from "graphql-request";
 import client from "../graphqlClient";
 
@@ -22,8 +22,6 @@ const exercisesQuery = gql`
 `;
 
 export default function ExercisesScreen() {
-  // Access the client
-  const queryClient = useQueryClient();
   // Queries
   const { data, isLoading, error } = useQuery({
     queryKey: ["exercises"],

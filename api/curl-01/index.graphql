@@ -2,21 +2,23 @@ type InsertSetResponse {
   insertedId: String
 }
 
-scalar InputDocument
+# scalar represents the leaves of the query
+# scalar InputDocument
 
 input NewSet {
-  username: String!
+  # username: String!
   exercise: String!
   reps: Int!
-  weight: Float
+  weights: Float
 }
 
+# Mutation works similar to Query but defines the entry point of every GraphQL query
 type Mutation {
-  myQuery(
-    collection: String
-    dataSource: String
-    database: String
+  insertSet(
     document: NewSet
+    collection: String
+    database: String
+    dataSource: String
   ): InsertSetResponse
     @rest(
       method: POST
@@ -28,5 +30,13 @@ type Mutation {
           value: "DtR3KA89HDMI0FWGSiHPaTgftDySc6ET7RTsIXnfnWV4z7Ua54s1PD71a5X1Lp1U"
         }
       ]
+      # postbody: """
+      # {
+      # "collection": "sets",
+      # "database": "workouts",
+      # "dataSource": "Cluster0",
+      # "document": "{{.GetJSON "document"}}"
+      # }
+      # """
     )
 }

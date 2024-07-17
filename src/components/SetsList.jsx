@@ -8,7 +8,7 @@ const setsQuery = gql`
     sets {
       documents {
         _id
-        name
+        exercise
         reps
         weights
       }
@@ -16,7 +16,7 @@ const setsQuery = gql`
   }
 `;
 
-export default function SetsList() {
+export default function SetsList({ exerciseName }) {
   const { data, isLoading, error } = useQuery({
     queryKey: ["sets"],
     queryFn: async () => client.request(setsQuery),
@@ -31,10 +31,16 @@ export default function SetsList() {
     return <Text>Error in fetching data</Text>;
   }
 
+  const exercises = data.sets.documents.filter(
+    (set) => set.exercise === exerciseName
+  );
+
   return (
     <View>
-      {data.sets.documents.map((set) => (
+      <Text style={{ fontSize: 16, paddingHorizontal: 10 }}>Log History</Text>
+      {exercises.map((set) => (
         <Text
+          key={set._id}
           style={{
             backgroundColor: "white",
             marginVertical: 10,
@@ -43,7 +49,7 @@ export default function SetsList() {
             overflow: "hidden",
           }}
         >
-          {set.reps} X {set.weights}
+          {set.reps} X {set.weights || "No Weights"}
         </Text>
       ))}
     </View>

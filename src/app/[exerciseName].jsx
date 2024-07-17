@@ -78,8 +78,8 @@ export default function ExerciseDetailsScreen() {
         ) : (
           <Text>Exercise Not Found</Text>
         )}
-        <NewSetInput />
-        <SetsList />
+        <NewSetInput exerciseName={exercise.name} />
+        <SetsList exerciseName={exercise.name} />
       </ScrollView>
     </>
   );

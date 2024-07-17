@@ -1,8 +1,8 @@
 type DocumentsEntry {
   _id: String
-  name: String
+  exercise: String
   reps: Int
-  weights: Int
+  weights: Float
 }
 
 type Root {

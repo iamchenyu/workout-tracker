@@ -2,10 +2,12 @@ import { useQuery } from "@tanstack/react-query";
 import { gql } from "graphql-request";
 import { Text, ActivityIndicator, FlatList, View } from "react-native";
 import client from "../graphqlClient";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 const setsQuery = gql`
-  query exercises {
-    sets {
+  query sets($exercise: String!, $username: String!) {
+    sets(exercise: $exercise, username: $username) {
       documents {
         _id
         exercise
@@ -17,9 +19,11 @@ const setsQuery = gql`
 `;
 
 export default function SetsList({ exerciseName }) {
+  const { username } = useContext(AuthContext);
   const { data, isLoading, error } = useQuery({
-    queryKey: ["sets"],
-    queryFn: async () => client.request(setsQuery),
+    queryKey: ["sets", exerciseName], // no need to provide username here because we mainly work with a single user at one time. Unless we can easily toggle among different users
+    queryFn: async () =>
+      client.request(setsQuery, { exercise: exerciseName, username }),
   });
 
   if (isLoading) {
@@ -31,14 +35,10 @@ export default function SetsList({ exerciseName }) {
     return <Text>Error in fetching data</Text>;
   }
 
-  const exercises = data.sets.documents.filter(
-    (set) => set.exercise === exerciseName
-  );
-
   return (
     <View>
       <Text style={{ fontSize: 16, paddingHorizontal: 10 }}>Log History</Text>
-      {exercises.map((set) => (
+      {data.sets.documents.map((set) => (
         <Text
           key={set._id}
           style={{

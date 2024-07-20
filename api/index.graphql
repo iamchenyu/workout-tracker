@@ -2,8 +2,8 @@ schema
   @sdl(
     files: [
       "exercises/index.graphql"
-      "curl/index.graphql"
-      "curl-01/index.graphql"
+      "db-find/index.graphql"
+      "db-insert/index.graphql"
     ]
   ) {
   query: Query

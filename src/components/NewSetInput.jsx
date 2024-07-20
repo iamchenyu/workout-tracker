@@ -1,8 +1,9 @@
 import { View, Text, StyleSheet, TextInput, Button } from "react-native";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { gql } from "graphql-request";
 import client from "../graphqlClient";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { AuthContext } from "../context/AuthContext";
 
 const addSetMutation = gql`
   mutation MyMutation($newSet: NewSet!) {
@@ -21,8 +22,18 @@ export default function NewSetInput({ exerciseName }) {
   const [reps, setReps] = useState(0);
   const [weights, setWeights] = useState(0);
   const [isZeroRep, setIsZeroRep] = useState(false);
+  const { username } = useContext(AuthContext);
+  const queryClient = useQueryClient();
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: async (newSet) => client.request(addSetMutation, { newSet }),
+    onSuccess: () => {
+      // only validate the name when matches exerciseName
+      queryClient.invalidateQueries({ queryKey: ["sets", exerciseName] }),
+        // reset reps and weights and error messages
+        setReps(0);
+      setWeights(0);
+      setIsZeroRep(false);
+    },
   });
 
   const handleAddSet = () => {
@@ -34,14 +45,12 @@ export default function NewSetInput({ exerciseName }) {
     }
     // save reps and weights to db
     mutate({
+      username,
       exercise: exerciseName,
       reps,
       weights,
     });
-    // reset reps and weights and error messages
-    setReps(0);
-    setWeights(0);
-    setIsZeroRep(false);
+    // validate and reset the data in query validation function
   };
 
   if (isError) {

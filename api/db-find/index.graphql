@@ -10,7 +10,7 @@ type Root {
 }
 
 type Query {
-  sets: Root
+  sets(exercise: String!, username: String!): Root
     @rest(
       method: POST
       endpoint: "https://us-east-1.aws.data.mongodb-api.com/app/data-dzdisud/endpoint/data/v1/action/find"
@@ -25,7 +25,11 @@ type Query {
       {
       "collection": "sets",
       "database": "workouts",
-      "dataSource":"Cluster0"
+      "dataSource":"Cluster0",
+      "filter": {
+        "exercise": "{{ .Get "exercise" }}",
+        "username": "{{ .Get "username" }}"
+      }
       }
       """
     )

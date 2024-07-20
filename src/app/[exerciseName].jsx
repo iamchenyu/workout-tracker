@@ -79,6 +79,8 @@ export default function ExerciseDetailsScreen() {
           <Text>Exercise Not Found</Text>
         )}
         <NewSetInput exerciseName={exercise.name} />
+        {/* if we still want to use FlatList instead of map function inside the SetsList component, we can
+        use a built-in attribute ListHeaderComponent to render all components above SetsList. In this way, we can use ScrollView outside of a FlatList component. */}
         <SetsList exerciseName={exercise.name} />
       </ScrollView>
     </>

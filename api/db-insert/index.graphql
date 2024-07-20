@@ -6,7 +6,7 @@ type InsertSetResponse {
 # scalar InputDocument
 
 input NewSet {
-  # username: String!
+  username: String!
   exercise: String!
   reps: Int!
   weights: Float

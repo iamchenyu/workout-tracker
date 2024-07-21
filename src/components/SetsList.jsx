@@ -4,6 +4,8 @@ import { Text, ActivityIndicator, FlatList, View } from "react-native";
 import client from "../graphqlClient";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import SetsListItem from "./SetsListItem";
+import ProgressGraph from "../components/ProgressGraph";
 
 const setsQuery = gql`
   query sets($exercise: String!, $username: String!) {
@@ -37,20 +39,12 @@ export default function SetsList({ exerciseName }) {
 
   return (
     <View>
-      <Text style={{ fontSize: 16, paddingHorizontal: 10 }}>Log History</Text>
+      {/* <Text style={{ fontSize: 16, paddingHorizontal: 10, marginVertical: 5 }}>
+        Log History
+      </Text> */}
+      <ProgressGraph sets={data.sets.documents} />
       {data.sets.documents.map((set) => (
-        <Text
-          key={set._id}
-          style={{
-            backgroundColor: "white",
-            marginVertical: 10,
-            padding: 10,
-            borderRadius: 5,
-            overflow: "hidden",
-          }}
-        >
-          {set.reps} X {set.weights || "No Weights"}
-        </Text>
+        <SetsListItem set={set} />
       ))}
     </View>
   );

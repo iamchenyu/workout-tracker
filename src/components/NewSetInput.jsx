@@ -59,7 +59,9 @@ export default function NewSetInput({ exerciseName }) {
 
   return (
     <>
-      <Text style={{ fontSize: 16, paddingHorizontal: 10 }}>Add Log</Text>
+      <Text style={{ fontSize: 16, paddingHorizontal: 10, marginVertical: 5 }}>
+        Add Log
+      </Text>
       <View style={styles.container}>
         <View style={styles.row}>
           <TextInput
@@ -99,7 +101,7 @@ export default function NewSetInput({ exerciseName }) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "white",
-    padding: 10,
+    paddingHorizontal: 10,
     borderRadius: 5,
     gap: 10,
   },

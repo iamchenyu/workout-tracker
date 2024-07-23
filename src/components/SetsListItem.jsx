@@ -2,8 +2,6 @@ import { View, Text } from "react-native";
 import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
 
 export default function SetsListItem({ set }) {
-  const timestamp = parseInt(set._id.toString().substr(0, 8), 16) * 1000;
-  const createdAt = new Date(timestamp);
   return (
     <Text
       key={set._id}
@@ -14,9 +12,9 @@ export default function SetsListItem({ set }) {
         overflow: "hidden",
       }}
     >
-      {set.reps} X {set.weights || "No Weights"}{" "}
+      {set.reps} reps X {set.weights ? `${set.weights} lb` : "No Weights"}{" "}
       <Text style={{ fontStyle: "italic", color: "gray" }}>
-        @ {formatDistanceToNow(createdAt)} ago
+        @ {formatDistanceToNow(set.createdAt)} ago
       </Text>
     </Text>
   );

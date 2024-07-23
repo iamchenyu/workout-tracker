@@ -11,10 +11,8 @@ export default function ProgressGraph({ sets = [] }) {
     date: idToDate(set._id),
     value: set.reps,
   }));
-  console.log(points);
   return (
     <View style={styles.container}>
-      <Text>ProgressGraph</Text>
       <LineGraph
         points={points}
         animated={false}

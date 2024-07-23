@@ -1,18 +1,12 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  ActivityIndicator,
-} from "react-native";
-import { useLocalSearchParams } from "expo-router";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { useLocalSearchParams, useNavigation } from "expo-router";
 import { Stack } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { gql } from "graphql-request";
 import client from "../graphqlClient";
-import NewSetInput from "../components/NewSetInput";
 import SetsList from "../components/SetsList";
+import Loading from "../components/Loading";
 
 const exerciseQuery = gql`
   query exercises($name: String) {
@@ -28,63 +22,57 @@ const exerciseQuery = gql`
 
 export default function ExerciseDetailsScreen() {
   // useLocalSearchParams hook returns the URL parameters for the contextually selected route
+  // e.g.: {"exerciseName": "Rickshaw Carry"}
+  // "exerciseName" is defined as the file name
+  // "Rickshaw Carry" is defined as the path name in ExerciseListItem.jsx
   const params = useLocalSearchParams();
-  const [isSeeMore, setIsSeeMore] = useState(false);
   const exerciseName = params.exerciseName;
+  const [isSeeMore, setIsSeeMore] = useState(false);
   const { data, isLoading, error } = useQuery({
     queryKey: ["exercises", exerciseName], // cache
     queryFn: async () => client.request(exerciseQuery, { name: exerciseName }),
   });
 
+  // option 1 to customize the single screen option
+  const navigation = useNavigation();
+  useEffect(() => {
+    navigation.setOptions({
+      title: exerciseName,
+    });
+  }, [navigation]);
+
   const exercise = data?.exercises[0];
 
   if (isLoading) {
-    return <ActivityIndicator />;
+    return <Loading />;
   }
 
   if (error) {
     console.log(error);
-    return <Text>Error in fetching data</Text>;
   }
 
   return (
-    <>
-      <ScrollView contentContainerStyle={styles.container}>
-        <Stack.Screen options={{ title: "Exercise Details" }} />
-        {exercise ? (
-          <>
-            <View style={styles.panel}>
-              <Text style={styles.exerciseName}>{exercise.name}</Text>
-              <Text style={styles.exerciseSubtitle}>
-                {exercise.muscle.toUpperCase()} |{" "}
-                {exercise.equipment.toUpperCase()}
-              </Text>
-            </View>
-            <View style={styles.panel}>
-              <Text
-                style={styles.exerciseIst}
-                numberOfLines={isSeeMore ? 0 : 3}
-              >
-                {exercise.instructions}
-              </Text>
-              <Text
-                onPress={() => setIsSeeMore(!isSeeMore)}
-                style={styles.seeMore}
-              >
-                {isSeeMore ? "See Less" : "See More"}
-              </Text>
-            </View>
-          </>
-        ) : (
-          <Text>Exercise Not Found</Text>
-        )}
-
-        <NewSetInput exerciseName={exercise.name} />
-        {/* if we still want to use FlatList instead of map function inside the SetsList component, we can
-        use a built-in attribute ListHeaderComponent to render all components above SetsList. In this way, we can use ScrollView outside of a FlatList component. */}
-        <SetsList exerciseName={exercise.name} />
-      </ScrollView>
-    </>
+    <View style={styles.container}>
+      {/* if we want to use ScrollView， we cannot use nested FlatList  */}
+      {/* <ScrollView contentContainerStyle={styles.container}> */}
+      {/* option 2 to customize the single screen option */}
+      <Stack.Screen
+      // options={{
+      //   title: "Exercise Details",
+      // }}
+      />
+      {error ? (
+        <Text>Error in fetching data</Text>
+      ) : exercise ? (
+        <SetsList
+          exercise={exercise}
+          isSeeMore={isSeeMore}
+          setIsSeeMore={setIsSeeMore}
+        />
+      ) : (
+        <Text>Exercise Not Found</Text>
+      )}
+    </View>
   );
 }
 
@@ -92,27 +80,6 @@ const styles = StyleSheet.create({
   container: {
     padding: 10,
     gap: 10,
-  },
-  panel: {
-    backgroundColor: "white",
-    padding: 20,
-    borderRadius: 10,
-  },
-  exerciseName: {
-    fontSize: 20,
-    fontWeight: 500,
-  },
-  exerciseSubtitle: {
-    color: "dimgray",
-  },
-  exerciseIst: {
-    fontSize: 16,
-    lineHeight: 20,
-  },
-  seeMore: {
-    alignSelf: "center",
-    paddingTop: 10,
-    fontWeight: 600,
-    color: "gray",
+    flex: 1,
   },
 });

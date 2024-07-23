@@ -37,9 +37,8 @@ export default function NewSetInput({ exerciseName }) {
   });
 
   const handleAddSet = () => {
-    console.warn("Add Set!", exerciseName, reps, weights);
     // validate reps
-    if (reps === 0) {
+    if (reps <= 0) {
       setIsZeroRep(true);
       return;
     }
@@ -50,6 +49,7 @@ export default function NewSetInput({ exerciseName }) {
       reps,
       weights,
     });
+    // console.warn("Add Set!", exerciseName, reps, weights);
     // validate and reset the data in query validation function
   };
 
@@ -59,9 +59,9 @@ export default function NewSetInput({ exerciseName }) {
 
   return (
     <>
-      <Text style={{ fontSize: 16, paddingHorizontal: 10, marginVertical: 5 }}>
+      {/* <Text style={{ fontSize: 16, paddingHorizontal: 10, marginVertical: 5 }}>
         Add Log
-      </Text>
+      </Text> */}
       <View style={styles.container}>
         <View style={styles.row}>
           <TextInput
@@ -84,7 +84,9 @@ export default function NewSetInput({ exerciseName }) {
           />
         </View>
         {isZeroRep ? (
-          <Text style={{ color: "red" }}>Reps cannot be 0.</Text>
+          <Text style={{ color: "red" }}>
+            Reps cannot be less than or equal to 0.
+          </Text>
         ) : (
           ""
         )}
@@ -101,7 +103,7 @@ export default function NewSetInput({ exerciseName }) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "white",
-    paddingHorizontal: 10,
+    padding: 10,
     borderRadius: 5,
     gap: 10,
   },

@@ -1,19 +1,14 @@
 import { StatusBar } from "expo-status-bar";
-import {
-  StyleSheet,
-  Text,
-  View,
-  FlatList,
-  ActivityIndicator,
-} from "react-native";
-import ExerciseListItem from "../components/ExerciseListItem";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { StyleSheet, View, FlatList } from "react-native";
+import ExerciseListItem from "../components/exercise/ExerciseListItem";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { gql } from "graphql-request";
 import client from "../graphqlClient";
 import { Redirect, Stack } from "expo-router";
 import { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useDebounce } from "@uidotdev/usehooks";
+import Loading from "../components/Loading";
 
 const exercisesQuery = gql`
   query exercises($muscle: String, $name: String) {
@@ -45,7 +40,7 @@ export default function ExercisesScreen() {
   }
 
   const exercises = data?.pages.flatMap((page) => page.exercises);
-  console.log(exercises);
+  console.log("exercises: ", exercises);
 
   const handleLoadMore = () => {
     if (isFetchNextPage) {
@@ -60,7 +55,7 @@ export default function ExercisesScreen() {
   return (
     <View style={styles.container}>
       {isLoading ? (
-        <ActivityIndicator />
+        <Loading />
       ) : (
         <>
           <Stack.Screen
@@ -69,14 +64,16 @@ export default function ExercisesScreen() {
                 placeholder: "search...",
                 onChangeText: (e) => setSearchTerm(e.nativeEvent.text),
                 hideWhenScrolling: false,
+                autoCapitalize: "characters",
+                barTintColor: "#fff",
+                obscureBackground: true,
               },
             }}
           />
-          {/* <Text style={styles.title}>Workout Tracker for {username}</Text> */}
           <FlatList
             data={exercises}
-            keyExtractor={(item, index) => item + index}
-            renderItem={({ item }) => <ExerciseListItem item={item} />}
+            keyExtractor={(exercise, index) => exercise + index}
+            renderItem={({ item }) => <ExerciseListItem exercise={item} />}
             contentContainerStyle={{ gap: 10 }}
             onEndReachedThreshold={1}
             onEndReached={handleLoadMore}
@@ -93,7 +90,7 @@ export default function ExercisesScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1, // equally share the available space in a flex container
     justifyContent: "center",
   },
   title: {
@@ -102,3 +99,8 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
 });
+
+// flex: 1 equals to:
+// flexGrow: 1, the item will grow to fill up the remaining space proportionally along with other items that have a flex-grow value.
+// flexShrink: 1, the item will shrink proportionally along with other items that have a flex-shrink value.
+// flexBasis: 0, the size of the item is determined solely by the flex-grow and flex-shrink properties and not by the item's content or intrinsic size.

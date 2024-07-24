@@ -53,6 +53,7 @@ export default function SetsList({ exercise, isSeeMore, setIsSeeMore }) {
     const timestamp = parseInt(set._id.toString().substr(0, 8), 16) * 1000;
     const createdAt = new Date(timestamp);
     set["createdAt"] = createdAt;
+    set["ttlWeights"] = set.reps * set.weights;
   });
   sets.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 

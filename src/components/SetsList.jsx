@@ -1,13 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { gql } from "graphql-request";
-import {
-  Text,
-  ActivityIndicator,
-  FlatList,
-  View,
-  ScrollView,
-  StyleSheet,
-} from "react-native";
+import { Text, FlatList, View, StyleSheet } from "react-native";
 import client from "../graphqlClient";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";

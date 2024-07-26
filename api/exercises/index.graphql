@@ -11,8 +11,9 @@ type Query {
   exercises(muscle: String, name: String): [Exercise]
     @rest(
       endpoint: "https://api.api-ninjas.com/v1/exercises"
-      headers: [
-        { name: "x-api-key", value: "JBw0OTy/YFoU1Cp2klCfDQ==VNRgK4CdB0Kj7Eqq" }
-      ]
+      configuration: "ninjas_api_config"
+      # headers: [
+      #   { name: "x-api-key", value: "JBw0OTy/YFoU1Cp2klCfDQ==VNRgK4CdB0Kj7Eqq" }
+      # ]
     )
 }

@@ -37,3 +37,4 @@ yarn-error.*
 .env
 api/temp.txt
 api/config.yaml
+api/stepzen.config.json
